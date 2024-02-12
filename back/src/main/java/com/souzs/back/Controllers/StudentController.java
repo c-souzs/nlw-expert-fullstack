@@ -1,17 +1,25 @@
 package com.souzs.back.Controllers;
 
 import com.souzs.back.DTOs.CheckStudentCertificationDTO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.souzs.back.Service.CheckHasCertification;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
+    @Autowired
+    private CheckHasCertification checkHasCertification;
+
     @PostMapping("/checkHasCertificate")
     public String checkHasCertificate(@RequestBody CheckStudentCertificationDTO checkStudentCertificationDTO) {
-        return "Has certificate";
+        var result = this.checkHasCertification.execute(checkStudentCertificationDTO);
+
+        if(result) {
+            return "Student has certificate";
+        }
+
+        return "Student does not have certificate";
     }
 }

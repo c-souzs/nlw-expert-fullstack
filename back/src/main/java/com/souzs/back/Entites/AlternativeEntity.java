@@ -7,24 +7,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "students")
-public class StudentEntity {
-
+@Entity(name = "alternatives")
+public class AlternativeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    private String description;
 
-    @OneToMany(mappedBy = "student")
-    private List<CertificationEntity> certifications;
+    @Column(name = "is_correct", nullable = false)
+    private boolean isCorrect;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

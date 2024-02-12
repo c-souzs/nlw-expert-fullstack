@@ -13,18 +13,20 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "students")
-public class StudentEntity {
-
+@Entity(name = "questions")
+public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(length = 50, nullable = false)
+    private String tech;
 
-    @OneToMany(mappedBy = "student")
-    private List<CertificationEntity> certifications;
+    private String description;
+
+    @OneToMany
+    @JoinColumn(name = "question_id")
+    private List<AlternativeEntity> alternatives;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
