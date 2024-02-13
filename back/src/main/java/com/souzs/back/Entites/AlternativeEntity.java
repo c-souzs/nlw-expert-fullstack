@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "alternatives")
+@Entity(name = "alternative")
 public class AlternativeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

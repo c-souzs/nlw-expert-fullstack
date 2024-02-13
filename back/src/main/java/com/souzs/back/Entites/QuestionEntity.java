@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "questions")
+@Entity(name = "question")
 public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
