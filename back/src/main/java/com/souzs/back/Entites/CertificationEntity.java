@@ -22,8 +22,9 @@ public class CertificationEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(length = 50, nullable = false)
-    private String tech;
+    @ManyToOne
+    @JoinColumn(name = "tech_id")
+    private TechCertificationEntity techEntity;
 
     @Column(length = 10, nullable = false)
     private int grade;

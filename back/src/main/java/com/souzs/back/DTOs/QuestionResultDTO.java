@@ -1,5 +1,6 @@
 package com.souzs.back.DTOs;
 
+import com.souzs.back.Entites.TechCertificationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Builder
 public class QuestionResultDTO {
     private UUID id;
-    private String technology;
+    private TechCertificationEntity tech;
     private String description;
 
     private List<AlternativeResultDTO> alternatives;

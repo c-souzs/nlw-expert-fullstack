@@ -2,18 +2,17 @@ package com.souzs.back.Service;
 
 import com.souzs.back.DTOs.CheckStudentCertificationDTO;
 import com.souzs.back.DTOs.StudentCertificationAnswerDTO;
-import com.souzs.back.Entites.AnswerEntity;
-import com.souzs.back.Entites.CertificationEntity;
-import com.souzs.back.Entites.QuestionEntity;
-import com.souzs.back.Entites.StudentEntity;
+import com.souzs.back.Entites.*;
 import com.souzs.back.Repositores.CertificationStudentRepository;
 import com.souzs.back.Repositores.QuestionRepository;
 import com.souzs.back.Repositores.StudentRepository;
+import com.souzs.back.Repositores.TechCertificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,14 +31,22 @@ public class StudentCertificationAnswers {
     @Autowired
     private CheckHasCertification checkHasCertification;
 
+    @Autowired
+    TechCertificationRepository techCertificationRepository;
+
     public CertificationEntity execute(StudentCertificationAnswerDTO studentAnswerCertificationDTO) throws Exception {
 
-        var hasCertification = this.checkHasCertification.execute(new CheckStudentCertificationDTO(studentAnswerCertificationDTO.getEmail(), studentAnswerCertificationDTO.getTech()));
+        var hasCertification = this.checkHasCertification.execute(new CheckStudentCertificationDTO(studentAnswerCertificationDTO.getEmail(), studentAnswerCertificationDTO.getTechId()));
 
         if(hasCertification) throw new Exception("Estudante já possui uma certificação para essa tecnologia.");
 
+        var idTech = studentAnswerCertificationDTO.getTechId();
 
-        List<QuestionEntity> questionsByTech = questionRepository.findByTech(studentAnswerCertificationDTO.getTech());
+        Optional<TechCertificationEntity> techCertification = techCertificationRepository.findById(idTech);
+
+        if(techCertification.isEmpty()) throw new RuntimeException("Tecnologia não encontrada.");
+
+        List<QuestionEntity> questionsByTech = questionRepository.findByTechEntityId(idTech);
         List<AnswerEntity> answersCertification = new ArrayList<>();
 
         AtomicInteger correctAnswers = new AtomicInteger(0);
@@ -78,7 +85,7 @@ public class StudentCertificationAnswers {
         }
 
         CertificationEntity certification = CertificationEntity.builder()
-                .tech(studentAnswerCertificationDTO.getTech())
+                .techEntity(techCertification.get())
                 .studentId(studentId)
                 .grade(correctAnswers.get())
                 .build();

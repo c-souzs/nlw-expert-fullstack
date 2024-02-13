@@ -11,7 +11,7 @@ public class CheckHasCertification {
     private CertificationStudentRepository certificationStudentRepository;
 
     public boolean execute(CheckStudentCertificationDTO studentDTO) {
-        var result = this.certificationStudentRepository.findByStudentEmailAndTech(studentDTO.getEmail(), studentDTO.getTech());
+        var result = this.certificationStudentRepository.findByStudentEmailAndTech(studentDTO.getEmail(), studentDTO.getTechId());
 
         return !result.isEmpty();
     }

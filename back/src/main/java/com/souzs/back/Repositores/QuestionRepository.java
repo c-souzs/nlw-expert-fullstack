@@ -8,5 +8,5 @@ import java.util.UUID;
 
 
 public interface QuestionRepository extends JpaRepository<QuestionEntity, UUID> {
-    List<QuestionEntity> findByTech(String tech);
+    List<QuestionEntity> findByTechEntityId(UUID techId);
 }

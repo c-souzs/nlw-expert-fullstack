@@ -5,6 +5,7 @@ import com.souzs.back.DTOs.QuestionResultDTO;
 import com.souzs.back.Entites.AlternativeEntity;
 import com.souzs.back.Entites.QuestionEntity;
 import com.souzs.back.Repositores.QuestionRepository;
+import com.souzs.back.Repositores.TechCertificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +22,17 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @GetMapping("/tech/{tech}")
-    public List<QuestionResultDTO> findByTech(@PathVariable String tech) {
-        var result = this.questionRepository.findByTech(tech);
+    @Autowired
+    private TechCertificationRepository techCertificationRepository;
+
+    @GetMapping("/tech/{nameTech}")
+    public List<QuestionResultDTO> findByTech(@PathVariable String nameTech) {
+
+        var resulTech = techCertificationRepository.findByName(nameTech);
+
+        if(resulTech.isEmpty()) throw new RuntimeException("Tecnhologia não encontrada.");
+
+        var result = this.questionRepository.findByTechEntityId(resulTech.get().getId());
 
         var toMap = result.stream().map(question -> mapQuestionToDTO(question))
                 .collect(Collectors.toList());
@@ -33,7 +42,7 @@ public class QuestionController {
     static QuestionResultDTO mapQuestionToDTO(QuestionEntity question) {
         var questionResultDTO = QuestionResultDTO.builder()
                 .id(question.getId())
-                .technology(question.getTech())
+                .tech(question.getTechEntity())
                 .description(question.getDescription()).build();
 
         List<AlternativeResultDTO> alternativesResultDTOs = question.getAlternatives()
