@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/ranking")
+@RequestMapping("api/ranking")
 public class RankingController {
 
     @Autowired
@@ -22,11 +23,11 @@ public class RankingController {
     @Autowired
     private TechCertificationRepository techCertificationRepository;
 
-    @GetMapping("/{techName}")
-    public ResponseEntity<Object> getRanking(@PathVariable String techName) {
+    @GetMapping("/{techId}")
+    public ResponseEntity<Object> getRanking(@PathVariable UUID techId) {
         try {
 
-            var tech = this.techCertificationRepository.findByName(techName);
+            var tech = this.techCertificationRepository.findById(techId);
 
             if(tech.isEmpty()) throw new RuntimeException("Tecnologia não encontrada.");
 

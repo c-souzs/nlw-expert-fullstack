@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class StudentCertificationAnswers {
+public class StudentCertification {
 
     @Autowired
     private StudentRepository studentRepository;

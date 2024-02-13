@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("api/questions")
 public class QuestionController {
 
     @Autowired
@@ -25,10 +26,10 @@ public class QuestionController {
     @Autowired
     private TechCertificationRepository techCertificationRepository;
 
-    @GetMapping("/tech/{nameTech}")
-    public List<QuestionResultDTO> findByTech(@PathVariable String nameTech) {
+    @GetMapping("/tech/{techId}")
+    public List<QuestionResultDTO> findByTech(@PathVariable UUID techId) {
 
-        var resulTech = techCertificationRepository.findByName(nameTech);
+        var resulTech = techCertificationRepository.findById(techId);
 
         if(resulTech.isEmpty()) throw new RuntimeException("Tecnhologia não encontrada.");
 
