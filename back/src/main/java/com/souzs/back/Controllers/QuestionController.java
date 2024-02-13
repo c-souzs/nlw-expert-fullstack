@@ -7,6 +7,7 @@ import com.souzs.back.Entites.QuestionEntity;
 import com.souzs.back.Repositores.QuestionRepository;
 import com.souzs.back.Repositores.TechCertificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,17 +28,21 @@ public class QuestionController {
     private TechCertificationRepository techCertificationRepository;
 
     @GetMapping("/tech/{techId}")
-    public List<QuestionResultDTO> findByTech(@PathVariable UUID techId) {
+    public ResponseEntity<Object> findByTech(@PathVariable UUID techId) {
 
-        var resulTech = techCertificationRepository.findById(techId);
+        try {
+            var resulTech = techCertificationRepository.findById(techId);
 
-        if(resulTech.isEmpty()) throw new RuntimeException("Tecnhologia não encontrada.");
+            if(resulTech.isEmpty()) throw new RuntimeException("Tecnhologia não encontrada.");
 
-        var result = this.questionRepository.findByTechEntityId(resulTech.get().getId());
+            var result = this.questionRepository.findByTechEntityId(resulTech.get().getId());
 
-        var toMap = result.stream().map(question -> mapQuestionToDTO(question))
-                .collect(Collectors.toList());
-        return toMap;
+            var toMap = result.stream().map(question -> mapQuestionToDTO(question))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(toMap);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     static QuestionResultDTO mapQuestionToDTO(QuestionEntity question) {

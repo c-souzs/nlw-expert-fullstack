@@ -26,9 +26,7 @@ public class StudentController {
     public String checkHasCertificate(@RequestBody CheckStudentCertificationDTO checkStudentCertificationDTO) {
         var result = this.checkHasCertification.execute(checkStudentCertificationDTO);
 
-        if(result) {
-            return "Student has certificate";
-        }
+        if(result) return "Student has certificate";
 
         return "Student does not have certificate";
     }

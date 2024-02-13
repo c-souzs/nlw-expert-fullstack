@@ -29,7 +29,7 @@ public class RankingController {
 
             var tech = this.techCertificationRepository.findById(techId);
 
-            if(tech.isEmpty()) throw new RuntimeException("Tecnologia não encontrada.");
+            if(tech.isEmpty()) throw new Exception("Tecnologia não encontrada.");
 
 
             var result = this.rankingTop10.execute(tech.get().getId());

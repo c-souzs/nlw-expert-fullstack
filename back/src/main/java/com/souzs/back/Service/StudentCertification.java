@@ -53,15 +53,19 @@ public class StudentCertification {
 
         // Verifca se as respostas do estudante estão corretas
         studentAnswerCertificationDTO.getAnswersStudent().forEach(answer -> {
+            System.out.println("Passou aqui - 1");
+
             var hasQuestionByAnswer = questionsByTech.stream().filter(question -> question.getId().equals(answer.getQuestionId())).findFirst();
 
             if(hasQuestionByAnswer.isEmpty()) throw new RuntimeException("Questão não encontrada.");
+            System.out.println("Passou aqui - 2");
 
             var questionByAnswer = hasQuestionByAnswer.get();
 
             var hasFindCorrectAnswer = questionByAnswer.getAlternatives().stream().filter(alternative -> alternative.isCorrect()).findFirst();
 
             if(hasFindCorrectAnswer.isEmpty()) throw new RuntimeException("Alternativa correta não encontrada.");
+            System.out.println("Passou aqui - 3");
 
             var correctAnswer = hasFindCorrectAnswer.get();
 
@@ -71,6 +75,15 @@ public class StudentCertification {
             } else {
                 answer.setCorrect(false);
             }
+            System.out.println("Passou aqui - 4");
+            var answerCertification = AnswerEntity.builder()
+                    .questionID(answer.getQuestionId())
+                    .answerID(answer.getAlternativeId())
+                    .isCorrect(answer.isCorrect())
+                    .build();
+
+            answersCertification.add(answerCertification);
+            System.out.println("Passou aqui - 5");
         });
 
         var student = studentRepository.findByEmail(studentAnswerCertificationDTO.getEmail());

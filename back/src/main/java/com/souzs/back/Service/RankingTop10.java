@@ -17,9 +17,7 @@ public class RankingTop10 {
     public List<CertificationEntity> execute(UUID techId) {
         var result = this.certificationStudentRepository.findTop10ByTech(techId);
 
-        if(result.isEmpty()) {
-            throw new RuntimeException("Não existe certificações para essa tecnologia.");
-        }
+        if(result.isEmpty()) throw new RuntimeException("Não existe certificações para essa tecnologia.");
 
         return result;
     }
